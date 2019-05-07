@@ -1,0 +1,1 @@
+这个项目是专门用来练习，如何用Sequelize这个ORM框架来操作MYSQL数据库
