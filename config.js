@@ -3,5 +3,7 @@ module.exports={
     port:3306,
     username:'root',
     password:'Mxj125_MrT',
-    database:"text"
+    database:"test",
+    dialect:"mysql",
+    benchmark:true
 }
