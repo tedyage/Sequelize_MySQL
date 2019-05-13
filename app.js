@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const config = require('./config');
 
 {
     /*
@@ -10,8 +9,6 @@ const config = require('./config');
         host:'114.115.207.101',
         dialect:'mysql'
     });
-    
-    console.log(sequelize);
     
     (async()=>{
         try{
@@ -37,8 +34,6 @@ const config = require('./config');
         }
     });
     
-    console.log(sequelize2);
-    
     (async()=>{
         try{
             await sequelize2.authenticate();    //用于验证数据库连接是否成功建立
@@ -50,7 +45,7 @@ const config = require('./config');
         }
     })();
     
-
+    const config = require('./config');
     const sequelize3 = new Sequelize(config);
     
     (async()=>{
