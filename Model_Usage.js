@@ -103,22 +103,20 @@ User_Test.init({
         let project = {
             name:"Project01"
         }
+
         /*
         INSERT INTO `project` (`id`,`name`,`createTime`,`updateTime`) 
         VALUES (DEFAULT,?,?,?)
         */
         await Project.create(project);
-        console.log("Insert a data successfully.");
-        //project will be the first entry matches with the primary key '1'||null
+
         /*
         SELECT `id`, `name`, `createTime`, `updateTime`, `deletedAt` 
         FROM `project` AS `project` 
         WHERE (`project`.`deletedAt` IS NULL AND `project`.`id` = 1)
         */
         project = await Project.findByPk(1);
-        console.log("findByPk data with primary key 1 successfully.");
-        console.log(project.toString());
-        //project will be the first entry matches with the name 'Project02'||null
+
         /*
         SELECT `id`, `name`, `createTime`, `updateTime`, `deletedAt` 
         FROM `project` AS `project` 
@@ -127,7 +125,7 @@ User_Test.init({
         project = await Project.findOne({where:{
             name:'Project01'
         }});
-        console.log("findOne data with filter successfully.");
+
         /*
         SELECT `id`, `name` AS `title` 
         FROM `project` AS `project` 
@@ -175,6 +173,54 @@ User_Test.init({
         console.log(created);                                      //true，代表数据是新添加的。
         console.log(user_test.toString());                         //数据结果
 
+        /*
+        SELECT `id`, `userName`, `password`, `createTime`, `updateTime`, `deletedAt` 
+        FROM `user_test` AS `user_test` 
+        WHERE (`user_test`.`deletedAt` IS NULL);
+        */
+        let projects = await Project.findAll();
+
+        /*
+        SELECT `id`, `name`, `createTime`, `updateTime`, `deletedAt` 
+        FROM `project` AS `project` 
+        WHERE (`project`.`deletedAt` IS NULL AND `project`.`name` = 'tedyage')
+        */
+        projects = await Project.findAll({
+            where:{
+                name:"tedyage"
+            }
+        });
+
+        /*
+        SELECT `id`, `name`, `createTime`, `updateTime`, `deletedAt` 
+        FROM `project` AS `project` 
+        WHERE (`project`.`deletedAt` IS NULL AND `project`.`id` IN (1, 2, 3))
+        */
+        projects = await Project.findAll({
+            where:{
+                id:[1,2,3]
+            }
+        });
+
+        /*
+        SELECT `name` AS `title`, `CreateTime` AS `CreateAt` 
+        FROM `project` AS `project` 
+        WHERE (`project`.`deletedAt` IS NULL 
+        AND (`project`.`name` = 'project01' 
+            AND (`project`.`id` IN (1, 2, 3) OR `project`.`id` >= 10))) 
+        LIMIT 1
+        */
+        await Project.findOne({
+            where:{
+                name:'project01',
+                id:{
+                    [Sequelize.Op.or]:[
+                        [1,2,3],
+                        {[Sequelize.Op.gte]:10}
+                    ]
+                }                
+            },attributes:[["name","title"],["CreateTime","CreateAt"]]
+        })
     }
     catch(e){
         console.error(e.message||e);
